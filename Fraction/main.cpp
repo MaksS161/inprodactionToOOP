@@ -1,6 +1,11 @@
 #include<iostream>
 using namespace std;
 
+class Fraction;
+Fraction operator*(Fraction left, Fraction right);
+Fraction operator/(const Fraction& left, const Fraction& right);
+
+
 class Fraction
 {
 	int integer;
@@ -79,7 +84,35 @@ public:
 		this->numerator = other.numerator;
 		this->denominator = other.denominator;
 		cout << "CopyAssigment:" << this << endl;
+		return *this;
 	}
+
+	Fraction& operator*=(const Fraction& other)
+	{
+		return *this  = *this*other;
+	}
+	Fraction& operator/=(const Fraction& other)
+	{
+		return *this = *this/other;
+	}
+
+	//			Increment/Decrement:
+	Fraction& operator++()	//Prefix increment
+	{
+		to_proper();
+		integer++;
+		return *this;
+	}
+	Fraction operator++(int)//Postfix(Suffix) increment
+	{
+		//Всегда принимает один и олько один парамерт типа 'int', и только 'int'
+		//Это позволяет компелятору на уровне перегрузки функции отличить постфиксный инкремент от префексного 
+		to_proper();
+		Fraction old = *this;
+		integer++;
+		return old;
+	} 
+
 	//			Methods:
 	Fraction& to_improper()
 	{
@@ -101,6 +134,22 @@ public:
 		inverted.denominator ^= inverted.numerator;
 		inverted.numerator ^= inverted.denominator;
 		return inverted;
+	}
+	Fraction& reduse()
+	{
+		int more, less, rest;
+		if (numerator > denominator)more = numerator, less = denominator;
+		else less = numerator, more = denominator;
+		do
+		{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more;//GCD - Greatest Common Divisor (Наибольший общий делитель)
+		numerator /= GCD;
+		denominator /= GCD;
+		return*this;
 	}
 	void print()const
 	{
@@ -136,7 +185,7 @@ Fraction operator*( Fraction left, Fraction right)
 	(
 		left.get_numerator() * right.get_numerator(),
 		left.get_denominator() * right.get_denominator()
-	).to_proper();
+	).to_proper().reduse();
 }
 
 Fraction operator/(const Fraction& left,const Fraction& right)
@@ -150,12 +199,30 @@ Fraction operator/(const Fraction& left,const Fraction& right)
 	).to_proper();*/
 	return left * right.inverted();
 }
-//#define CONSTRACTORS_CHECK
+std::ostream& operator<<(std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())os << obj.get_integer();
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer()) os << "(";
+		os<< obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os<< ")";
+	}
+	else if (obj.get_integer() == 0)os<< 0;
+	return os;
+	}
 
+//#define CONSTRACTORS_CHECK
+//#define ARITHMETICAL_OPERATORS_CHECK
+//#define INCREMENT_DECREMENT
+ 
 void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef CONSTRACTORS_CHECK
+#ifdef ARITHMETICAL_OPERATORS_CHECK
+
+
 	Fraction A; //Default constructor
 	A.print();
 
@@ -175,11 +242,32 @@ void main()
 	Fraction B(3, 4, 5);
 	B.print();
 	
-	Fraction C = A * B;
+	/*Fraction C = A * B;
 	A.print();
 	B.print();
 	C.print();
 
 	Fraction D = A / B;
-	D.print();
+	D.print();*/
+
+	A *= B;
+	A.print();
+
+	A /= B;
+	A.print();
+#endif // ARITHMETICAL_OPERATORS_CHECK
+#ifdef INCREMENT_DECREMENT
+	for (double i = 0.5; i < 10; i++)
+	{
+		cout << i << "\t";
+	}
+	cout << endl;
+	for (Fraction i(1, 2); i.get_integer() < 10; i++)
+	{
+		i.print();
+	}
+#endif //INCREMENT_DECREMENT 
+
+	Fraction A(2, 3, 4);
+	cout << A << endl;
 }
