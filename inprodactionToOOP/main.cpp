@@ -1,4 +1,4 @@
-#include<iostream>//маптпы 
+#include<iostream>
 using namespace std;
 #define delimitr "\n---------------------------------------------------------\n"
 
