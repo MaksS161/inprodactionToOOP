@@ -33,7 +33,27 @@ public:
 		this->denominator = denominator;
 	}
 	//			Constructors:
-	Fraction(int integer = 0, int numerator = 0, int denominator = 1)
+	Fraction()
+	{
+		this->integer = 0;
+		this->numerator = 0;
+		this->denominator = 1;
+		cout << "DefaultConstruct:\t" << this << endl;
+	}
+	Fraction(int integen)
+	{
+		this->integer = integen;
+		this->numerator = 0;
+		this->denominator = 1;
+	}
+	Fraction(int numerator, int denominator)
+	{
+		this->integer = 0;
+		this->numerator = numerator;
+		set_denominator (denominator);
+	}
+
+	Fraction(int integer, int numerator, int denominator)
 	{
 		this->integer = integer;
 		this->numerator = numerator;
@@ -62,8 +82,16 @@ public:
 void main()
 {
 	setlocale(LC_ALL, "");
-
 	Fraction A; //Default constructor
-
 	A.print();
+
+	Fraction B = 5; //Single-argument constructor
+	B.print();
+
+	Fraction C(1, 2);
+	C.print();
+	
+	Fraction D(2, 3, 4);
+	D.print();
+
 }
