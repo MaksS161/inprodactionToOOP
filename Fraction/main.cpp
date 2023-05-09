@@ -60,9 +60,25 @@ public:
 		set_denominator(denominator);
 		cout << "Constractor:\t" << this << endl;
 	}
+	Fraction(const Fraction& other)
+	{
+		this->integer = other.integer;
+		this->numerator = other.numerator;
+		this->denominator = other.denominator;	
+		cout << "CopyConstructor:" << this << endl;
+	}
+
 	~Fraction()
 	{
 		cout << "Destructor:\t" << this << endl;
+	}
+	//			Operators:
+	Fraction& operator=(const Fraction& other)
+	{
+		this->integer = other.integer;
+		this->numerator = other.numerator;
+		this->denominator = other.denominator;
+		cout << "CopyAssigment:" << this << endl;
 	}
 	//			Methods:
 	Fraction& to_improper()
@@ -77,7 +93,15 @@ public:
 		numerator %= denominator;
 		return *this;
 	} 
-
+	Fraction inverted()const
+	{
+		Fraction inverted = *this;
+		inverted.to_improper();
+		inverted.numerator ^= inverted.denominator;
+		inverted.denominator ^= inverted.numerator;
+		inverted.numerator ^= inverted.denominator;
+		return inverted;
+	}
 	void print()const
 	{
 		if (integer)cout << integer;
@@ -115,16 +139,16 @@ Fraction operator*( Fraction left, Fraction right)
 	).to_proper();
 }
 
-Fraction operator/(Fraction left,Fraction right)
+Fraction operator/(const Fraction& left,const Fraction& right)
 {
-	left.to_improper();
+	/*left.to_improper();
 	right.to_improper();
 	return Fraction
 	(
 		left.get_numerator()* right.get_denominator(),
 		left.get_denominator()*right.get_numerator()
-	).to_proper();
-	
+	).to_proper();*/
+	return left * right.inverted();
 }
 //#define CONSTRACTORS_CHECK
 
