@@ -65,6 +65,19 @@ public:
 		cout << "Destructor:\t" << this << endl;
 	}
 	//			Methods:
+	Fraction& to_improper()
+	{
+		numerator += integer * denominator;
+		integer = 0;
+		return *this;
+	}
+	Fraction& to_proper()
+	{
+		integer += numerator / denominator;
+		numerator %= denominator;
+		return *this;
+	} 
+
 	void print()const
 	{
 		if (integer)cout << integer;
@@ -79,9 +92,46 @@ public:
 	}
 };
 
+Fraction operator*( Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	//Fraction result;
+	//result.set_numerator(left.get_numerator() * right.get_numerator());
+	//result.set_denominator(left.get_denominator() * right.get_denominator());
+	
+	/*Fraction result
+	(
+		left.get_numerator()*right.get_numerator(),
+		left.get_denominator()*right.get_denominator()
+	);
+	result.to_proper();
+	return result;*/
+	//Прямо в 'return' создаем временный безымянный объект типа 'Fraction'
+	return Fraction
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	).to_proper();
+}
+
+Fraction operator/(Fraction left,Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return Fraction
+	(
+		left.get_numerator()* right.get_denominator(),
+		left.get_denominator()*right.get_numerator()
+	).to_proper();
+	
+}
+//#define CONSTRACTORS_CHECK
+
 void main()
 {
 	setlocale(LC_ALL, "");
+#ifdef CONSTRACTORS_CHECK
 	Fraction A; //Default constructor
 	A.print();
 
@@ -93,5 +143,19 @@ void main()
 	
 	Fraction D(2, 3, 4);
 	D.print();
+#endif // CONSTRACTORS_CHECK
 
+	Fraction A(2, 3, 4);
+	A.print();
+
+	Fraction B(3, 4, 5);
+	B.print();
+	
+	Fraction C = A * B;
+	A.print();
+	B.print();
+	C.print();
+
+	Fraction D = A / B;
+	D.print();
 }
