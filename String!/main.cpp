@@ -68,6 +68,15 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
+	String& operator=(String&& other)
+	{
+		delete[] this->str;
+		this->size = other.size;
+		this->str = other.str;
+		other.str = nullptr;
+		cout << "MoveAssignment:\t" << this << endl;
+		return *this;
+	}
 	String& operator+=(const String& other)
 	{
 		return *this = *this + other;
@@ -132,11 +141,13 @@ void main()
 	
 	//String str3 = str1 + str2;
 	String str3;
-	//str3 = str1 + str2;
+	str3 = str1 + str2;
 
 	cout << str3 << endl;
 	str1 += str2;
 	cout << str1 << endl;
+
+	
 
 #endif // HOME_WORK
 
