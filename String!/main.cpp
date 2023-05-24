@@ -59,7 +59,6 @@ public:
 	//			Operators:
 	String& operator=(const String& other)
 	{
-		//if (this == &other)return *this;//
 		delete[] this->str;
 		this->size = other.size;
 		this->str = new char[size] {};
