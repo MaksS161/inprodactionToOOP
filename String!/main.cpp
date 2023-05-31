@@ -29,14 +29,10 @@ public:
 	//				Constructors:
 	explicit String(int size = 80) : size(size), str(new char [size] {})
 	{
-		//this->size = size;
-		//this->str = new char[size] {};
-		cout << "Constructor:\t" << this << endl;
+		cout << "DefConstructor:\t" << this << endl;
 	}
-	String(const char str[]): size (strlen(str) + 1), str (new char[size] {})
+	String(const char str[]): String (strlen(str) + 1)
 	{
-		//this->size = strlen(str) + 1; //Послкольку класс хранит размер в байтаз, +1 нужен для хранения NULL элемента
-		//this->str = new char[size] {};//выделяем память подстраку 
 		for (int i = 0; i<size; i++)this->str[i] = str[i];
 		cout << "Constructor:\t" << this << endl;
 	}
